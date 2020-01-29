@@ -4,74 +4,48 @@ const regex = require('xregexp');
 // Parse the commands, options, and arguments and store them into an array
 function parseArgs(cmd)
 {
-    try {
-        const shortArgs = parseShortArgs(cmd);
-        const longArgs = parseLongArgs(cmd);
+    /*
+        We will now use regular expressions to parse long form options and 
+        short form options. Options can also accept arguments, for example
+        -m "Message". We will need to parse these as well.
+    */
 
-        console.log(shortArgs);
-        console.log(longArgs);
+    // Store all of the options along with their possible arguments into an array
+    const matches = [];
+    
+    // Regex for parsing
+    const re = regex(`
+        (?:
+            \\s-(?<short>[^"'\`\\s-]+)(?!\\S) # Short form option
+            | # OR
+            \\s--(?<long>[^"'\`\\s]+)(?!\\S) # Long form option
+        )
+        (?:\\s*"(?<arg>[^"]+)")? # Retrieve the argument if it exists. Optional
+    `, 'ix'); // Case insensitive and comments mode enabled
 
-    } catch(err) {
-
-    }
-}
-
-// Parses all of the short form command options
-function parseShortArgs(cmd)
-{
-    try {
-        const matches = [];
-
-        // Match the options and arguments, splicing them into the array
-        const re = regex(`
-            \\s-(?<options>[a-z0-9]+)(?!\\S) # Match the options
-            (?:\\s*"(?<arg>[^"]*)")? # Match the arguments
-        `, 'ix');
-        
-        /* Get the options and arguments (If they exist)
-            The supplied argument will be correlated to the last option in the list.
-            Ex. -lm "Message" m -> "Message"
+    regex.forEach(cmd, re, match => {
+        /*
+            Store each of the options into an array.
+            We will also correlate the last option in its list to the argument.
+            Ex. -alm "Message"     m -> "Message". 
+            Representation: [command, argument].
         */
-        regex.forEach(cmd, re, match => {
-            const options = (match.options).split('');
-            const last = options[options.length - 1];
 
-            const argument = { [last]: match.arg };
+        if (match.short) {
+            for (let char of match.short) {
+                matches.push([char]);
+            }
+        } else if (match.long) {
+            matches.push([match.long]);
+        } else {
+            return;
+        }
 
-            matches.push([options, argument]);
-        });
-
-        return matches;
-    } catch(err) {
-        return [];
-    }    
-}
-
-// Parses all of the long form command options
-function parseLongArgs(cmd)
-{
-    try {
-        const matches = []
-        ;
-        const re = regex(`
-            \\s--(?<long>[a-z]+)(?!\\S) # Retrieve the option
-            (?:\\s*"(?<arg>[^"]*)")? # Retrieve its argument if it exists
-        `, 'ix');
-
-        // Get the option and arguments (If they exist)
-        regex.forEach(cmd, re, match => {
-            const opt = [];
-
-            opt.push(match['long']);
-            opt.push(match['arg']);
-
-            matches.push(opt);
-        });
-        
-        return matches;
-    } catch(err) {
-        return [];
-    }
+        if (match.arg) {
+            matches[matches.length - 1].push(match.arg);
+        }
+    });
+    console.log(matches);
 }
 
 module.exports = parseArgs;
