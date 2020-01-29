@@ -1,9 +1,12 @@
 // Import external plugins
 const regex = require('xregexp');
 
-// Parse the commands, options, and arguments and store them into an array
-function parseArgs(cmd)
+// Parse the command, options, and arguments and store them into an array
+function parse(cmd)
 {
+    // Find the command name
+    const cmdName = parseCmdName(cmd);
+
     /*
         We will now use regular expressions to parse long form options and 
         short form options. Options can also accept arguments, for example
@@ -45,7 +48,21 @@ function parseArgs(cmd)
             matches[matches.length - 1].push(match.arg);
         }
     });
-    console.log(matches);
+    
+    // Returns a dictionary with the command name and its parsed options
+    return { [cmdName]: matches };
 }
 
-module.exports = parseArgs;
+/*
+    Parse the command used. This function assumes the prefix is truncated
+    and the command name is the first sequence of characters
+*/
+function parseCmdName(cmd)
+{
+    const re = regex('^[a-z]+', 'i');
+    const match = regex.match(cmd, re);
+
+    return match;
+}
+
+module.exports = parse;
