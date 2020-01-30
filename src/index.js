@@ -2,6 +2,7 @@
 const fs = require('fs');
 
 // Import local plugins
+const syntax = require('./syntax.js');
 const parse = require('./parse_cmd.js'); 
 const exec = require('./exec/index.js');
 
@@ -13,7 +14,7 @@ const client = new Discord.Client();
 const token = (fs.readFileSync('./conf/token.txt', 'utf-8')).toString();
 
 // Prefix for the client
-const prefix = '$';
+const prefix = syntax.prefix;
 
 client.on('ready', () => {
     console.log(`Logged in as client ${client.user.tag}`)

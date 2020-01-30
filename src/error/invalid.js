@@ -1,5 +1,5 @@
-const invalid_opt = 'Option does not exist. Try $help';
+const helpCmd = 'help';
 
 module.exports = {
-    invalid_opt
+    helpCmd: helpCmd
 };
