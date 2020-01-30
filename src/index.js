@@ -22,7 +22,12 @@ client.on('ready', () => {
 
 client.on('message', msg => { 
     const content = msg.content;
+
+    // Don't parse the message if the message doesn't start with the clients prefix
     if (!content.startsWith(prefix)) return;
+
+    // Don't parse the message if the message wasn't sent in a text channel
+    if (msg.channel.type !== 'text') return;
     
     const cmd = content.substring(prefix.length).trim();
 
