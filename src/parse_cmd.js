@@ -50,7 +50,10 @@ function parse(cmd)
     });
     
     // Returns a dictionary with the command name and its parsed options
-    return { [cmdName]: matches };
+    return {
+        name: cmdName,
+        options: matches
+    }
 }
 
 /*

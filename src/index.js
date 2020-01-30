@@ -1,30 +1,35 @@
 // Import external plugins
-const regex = require('xregexp');
+const fs = require('fs');
 
 // Import local plugins
 const parse = require('./parse_cmd.js'); 
-
-// Import external modules
-const regex = require('xregexp');
+const exec = require('./exec/index.js');
 
 // Set up the Discord client
 const Discord = require('discord.js');
 const client = new Discord.Client();
 
-const token = 'NjcxNzUyNjc0OTYxNTIyNzAx.XjBh1g.HcSNUBOs9LIBL0Cr7g-w3cnSFp0'
+// Fetch the authentication token
+const token = (fs.readFileSync('./conf/token.txt', 'utf-8')).toString();
+
+// Prefix for the client
 const prefix = '$';
 
 client.on('ready', () => {
     console.log(`Logged in as client ${client.user.tag}`)
 });
 
-client.on('message', msg =>{ 
+client.on('message', msg => { 
     const content = msg.content;
     if (!content.startsWith(prefix)) return;
     
     const cmd = content.substring(prefix.length).trim();
 
-    // Parse the arguments
+    // Parse command, storing its name and options inside a dictionary
+    const cmdDict = parse(cmd, prefix);
+
+    // Execute each of the commands from left to right
+    exec(msg, cmdDict);
 });
 
 client.login(token)
