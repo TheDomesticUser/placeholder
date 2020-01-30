@@ -1,3 +1,6 @@
+// Universal command options
+const universalOpts = require('.//universal/opts.js');
+
 // Import local variables from other files
 const invalid = require('../../error/invalid.js');
 
@@ -23,7 +26,8 @@ function members(msg, opts)
                 // Remove all of the bots from the member array
                 guildMembers = guildMembers.filter(member => member.user.bot !== true);
                 break;
-            case 'd': case 'direct-message':
+            // Universal options
+            case universalOpts.stdoutDmOptName:
                 outputLocation = msg.author;
                 break;
             default:

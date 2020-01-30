@@ -5,5 +5,11 @@
     command will cause ambiguity
 */
 
-// Universal command names
+// Universal option names
 const stdoutDmOptName = 'stdout-dm';
+const stderrDmOptName = 'stderr-dm';
+
+module.exports = {
+    stdoutDmOptName,
+    stderrDmOptName
+};

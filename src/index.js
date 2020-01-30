@@ -34,7 +34,7 @@ client.on('message', msg => {
     // Parse command, storing its name and options inside a dictionary
     const cmdDict = parse(cmd, prefix);
 
-    // Execute each of the commands from left to right
+    // Execute each of the commands along with their options from left to right
     exec(msg, cmdDict);
 });
 

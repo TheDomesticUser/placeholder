@@ -1,3 +1,6 @@
+// Universal command options
+const universalOpts = require('./universal/opts.js');
+
 // Import local variables from other files
 const invalid = require('../../error/invalid.js');
 
@@ -13,7 +16,8 @@ function help(msg, opts)
         // Find the corresponding option
         switch(opt[0]) // Option = [0], Argument = [1]
         {
-            case 'd': case 'direct-message':
+            // Universal options
+            case universalOpts.stdoutDmOptName:
                 outputLocation = msg.author;
                 break;
             default:
