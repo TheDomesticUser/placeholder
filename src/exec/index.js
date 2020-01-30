@@ -13,6 +13,9 @@ function exec(msg, cmdDict) {
         case 'help':
             Module.help(msg, optArr);
             break;
+        case 'members':
+            Module.members(msg, optArr);
+            break;
         default:
             console.log('command doesn\'t exist');
             break;
