@@ -3,7 +3,7 @@
     once finished parsing.
 */
 
-// Command key names used for storing the result values
+// Command key names used for storing the parse command result values
 const cmdNameKey = 'name';
 const optsNameKey = 'options';
 
