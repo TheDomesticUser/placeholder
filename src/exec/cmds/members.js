@@ -28,7 +28,7 @@ function members(msg, opts)
                 break;
             default:
                 errorLog.send(`Invalid option '${opt[0]}'. Try $${invalid.helpCmd} for more information.`);
-                break;
+                return;
         }
     }
 

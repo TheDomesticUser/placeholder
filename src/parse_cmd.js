@@ -1,6 +1,9 @@
 // Import external plugins
 const regex = require('xregexp');
 
+// Import local variables used for representing the parse results
+const parseStorage = require('./results/parse_storage.js');
+
 // Parse the command, options, and arguments and store them into an array
 function parse(cmd)
 {
@@ -14,7 +17,7 @@ function parse(cmd)
     */
 
     // Store all of the options along with their possible arguments into an array
-    const matches = [];
+    const opts = [];
     
     // Regex for parsing
     const re = regex(`
@@ -36,24 +39,24 @@ function parse(cmd)
 
         if (match.short) {
             for (let char of match.short) {
-                matches.push([char]);
+                opts.push([char]);
             }
         } else if (match.long) {
-            matches.push([match.long]);
+            opts.push([match.long]);
         } else {
             return;
         }
 
         if (match.arg) {
-            matches[matches.length - 1].push(match.arg);
+            opts[opts.length - 1].push(match.arg);
         }
     });
     
     // Returns a dictionary with the command name and its parsed options
     return {
-        name: cmdName,
-        options: matches
-    }
+        [parseStorage.cmdNameKey]: cmdName,
+        [parseStorage.optsNameKey]: opts
+    };
 }
 
 /*

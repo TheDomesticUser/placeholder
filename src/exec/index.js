@@ -4,11 +4,14 @@ const Module = require('./module.js');
 // Import local variables from other files
 const invalid = require('../error/invalid.js');
 
+// Import parse storage key names
+const parseStorage = require('../results/parse_storage.js');
+
 // Use a switch statement to check its matching command. After, loop through its options
 function exec(msg, cmdDict) {
     // Access its name and options
-    const cmdName = cmdDict.name;
-    const optArr = cmdDict.options;
+    const cmdName = cmdDict[parseStorage.cmdNameKey];
+    const optArr = cmdDict[parseStorage.optsNameKey];
 
     // Find the matching command
     switch(cmdName)
