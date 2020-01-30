@@ -5,7 +5,7 @@ const invalid = require('../../error/invalid.js');
 function help(msg, opts)
 {
     let url = 'https://github.com/TheDomesticUser/placeholder/tree/master/docs';
-    let sender = msg.channel;
+    let outputLocation = msg.channel;
     let errorLog = msg.channel;
 
     // Loop over the options, making modifications to its response properties
@@ -13,16 +13,16 @@ function help(msg, opts)
         // Find the corresponding option
         switch(opt[0]) // Option = [0], Argument = [1]
         {
-            case 'd': case 'direct':
-                sender = msg.author;
+            case 'd': case 'direct-message':
+                outputLocation = msg.author;
                 break;
             default:
-                errorLog.send(`Invalid option '${opt[0]}'. Try ${invalid.helpCmd} for more information.`);
+                errorLog.send(`Invalid option '${opt[0]}'. Try $${invalid.helpCmd} for more information.`);
                 return;
         }
     }
 
-    sender.send(url);
+    outputLocation.send(url);
 }
 
 module.exports = help;
