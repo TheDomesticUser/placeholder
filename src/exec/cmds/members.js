@@ -36,6 +36,20 @@ function members(msg, opts)
                 ));
                 break;
             case 'fR': case 'filter-regex':
+                // If there is no argument specified
+                if (opt.length <= 1) {
+                    stderr.send('No regex string specified for searching!');
+                    return;
+                } else {
+                    const response = filterRegex(guildMembers, opt[1]);
+
+                    if (!response) {
+                        stderr.send('Non-valid regex.');
+                        return;
+                    } else {
+                        guildMembers = response;
+                    }
+                }
                 break;
             // Universal options
             case universalOpts.stdoutDmOptName:
@@ -59,15 +73,33 @@ function members(msg, opts)
         // Else, send the results in a formatted string
         stdout.send(membersStr);
     }
-
 }
 
-// Takes an array of strings and filters them through the regex input
-function filterStrArr(strArr, regexStr, flagsStr='')
+/*
+    Takes an array of strings and filters them through the regex input, returning
+    an array of matches. Used for the -fR --filter-regex command
+*/
+function filterRegex(userArr, regexStr)
 {
-    // Create the regex object for more flexibility
-    const re = regex(regexStr, flagsStr);
-}
+    try {
+        // Create the regex object for more flexibility
+        const re = regex(regexStr);
+        const matches = [];
 
+        for (let user of userArr) {
+            // Get the username of the user
+            const username = user.displayName;
+
+            if (regex.match(username, re)) {
+                // Push the user object (Not username, it will be handled later)
+                matches.push(user);
+            }
+        }
+        return matches;
+
+    } catch(err) {
+        return false;
+    }
+}
 
 module.exports = members;
