@@ -29,11 +29,13 @@ function members(msg, opts)
                 // Remove all of the bots from the member array
                 guildMembers = guildMembers.filter(member => member.user.bot !== true);
                 break;
-            case 'n': case 'name':
+            case 'f': case 'filter':
                 // Filters out the members if their usernames don't contain the name input
                 guildMembers = guildMembers.filter(member => (
                     ((member.displayName).toLowerCase()).includes(opt[1].toLowerCase())
                 ));
+                break;
+            case 'fR': case 'filter-regex':
                 break;
             // Universal options
             case universalOpts.stdoutDmOptName:
@@ -61,10 +63,10 @@ function members(msg, opts)
 }
 
 // Takes an array of strings and filters them through the regex input
-function filterStrArr(strArr, regexStr, flagsStr)
+function filterStrArr(strArr, regexStr, flagsStr='')
 {
     // Create the regex object for more flexibility
-
+    const re = regex(regexStr, flagsStr);
 }
 
 

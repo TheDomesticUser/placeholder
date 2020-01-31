@@ -1,6 +1,3 @@
-// Import external plugins
-const fs = require('fs');
-
 // Import local plugins
 const syntax = require('./syntax.js');
 const parse = require('./parse_cmd.js'); 
@@ -11,7 +8,7 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 // Fetch the authentication token
-const token = (fs.readFileSync('./conf/token.txt', 'utf-8')).toString();
+const token = (require('fs').readFileSync('./conf/token.txt', 'utf-8')).toString();
 
 // Prefix for the client
 const prefix = syntax.prefix;

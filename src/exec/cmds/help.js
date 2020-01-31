@@ -8,8 +8,8 @@ const invalid = require('../../error/invalid.js');
 function help(msg, opts)
 {
     let url = 'https://github.com/TheDomesticUser/placeholder/tree/master/docs';
-    let outputLocation = msg.channel;
-    let errorLog = msg.channel;
+    let stdout = msg.channel;
+    let stderr = msg.channel;
 
     // Loop over the options, making modifications to its response properties
     for (let opt of opts) {
@@ -18,15 +18,15 @@ function help(msg, opts)
         {
             // Universal options
             case universalOpts.stdoutDmOptName:
-                outputLocation = msg.author;
+                stdout = msg.author;
                 break;
             default:
-                errorLog.send(`Invalid option '${opt[0]}'. Try $${invalid.helpCmd} for more information.`);
+                stderr.send(`Invalid option '${opt[0]}'. Try $${invalid.helpCmd} for more information.`);
                 return;
         }
     }
 
-    outputLocation.send(url);
+    stdout.send(url);
 }
 
 module.exports = help;
