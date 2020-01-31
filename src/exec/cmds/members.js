@@ -1,6 +1,9 @@
 // Universal command options
 const universalOpts = require('.//universal/opts.js');
 
+// Import external modules
+const regex = require('xregexp');
+
 // Import local variables from other files
 const invalid = require('../../error/invalid.js');
 
@@ -10,8 +13,8 @@ function members(msg, opts)
     let membersStr = ''; // String containing all of the guild members for printing
 
     let guildMembers = [];
-    let outputLocation = msg.channel;
-    let errorLog = msg.channel;
+    let stdout = msg.channel;
+    let stderr = msg.channel;
 
     // Gather all of the members in the guild
     for (let guildMember of msg.guild.members) {
@@ -26,12 +29,18 @@ function members(msg, opts)
                 // Remove all of the bots from the member array
                 guildMembers = guildMembers.filter(member => member.user.bot !== true);
                 break;
+            case 'n': case 'name':
+                // Filters out the members if their usernames don't contain the name input
+                guildMembers = guildMembers.filter(member => (
+                    ((member.displayName).toLowerCase()).includes(opt[1].toLowerCase())
+                ));
+                break;
             // Universal options
             case universalOpts.stdoutDmOptName:
-                outputLocation = msg.author;
+                stdout = msg.author;
                 break;
             default:
-                errorLog.send(`Invalid option '${opt[0]}'. Try $${invalid.helpCmd} for more information.`);
+                stderr.send(`Invalid option '${opt[0]}'. Try $${invalid.helpCmd} for more information.`);
                 return;
         }
     }
@@ -40,8 +49,23 @@ function members(msg, opts)
     for (let member of guildMembers) {
         membersStr += member.displayName + '\n';
     }
+    
+    // Inform the user that there were no results
+    if (!membersStr) {
+        stdout.send('There were no results.');
+    } else {
+        // Else, send the results in a formatted string
+        stdout.send(membersStr);
+    }
 
-    outputLocation.send(membersStr);
 }
+
+// Takes an array of strings and filters them through the regex input
+function filterStrArr(strArr, regexStr, flagsStr)
+{
+    // Create the regex object for more flexibility
+
+}
+
 
 module.exports = members;
