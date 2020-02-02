@@ -26,7 +26,7 @@ function parse(cmd)
             | # OR
             \\s--(?<long>[^"'\`\\s]+)(?!\\S) # Long form option
         )
-        (?:\\s*"(?<arg>[^"]+)")? # Retrieve the argument if it exists. Optional
+        (?:\\s*"(?<arg>(?:\\\\"|[^"])+)")? # Retrieve the argument if it exists. Optional
     `, 'ix'); // Case insensitive and comments mode enabled
 
     regex.forEach(cmd, re, match => {
