@@ -26,7 +26,8 @@ function parse(cmd)
             | # OR
             \\s--(?<long>[^"'\`\\s]+)(?!\\S) # Long form option
         )
-        (?:\\s*"(?<arg>(?:\\\\"|[^"])+)")? # Retrieve the argument if it exists. Optional
+        \\s*
+        (?<arg>"(?:\\\\"|[^"])+"|[^\\s]+)? # Retrieve the argument if it exists. Optional
     `, 'ix'); // Case insensitive and comments mode enabled
 
     regex.forEach(cmd, re, match => {
@@ -48,7 +49,16 @@ function parse(cmd)
         }
 
         if (match.arg) {
-            opts[opts.length - 1].push(match.arg);
+            // Remove the surrounding quotation marks
+            let arg = match.arg;
+
+            if (arg[0] === '"'
+                && arg[arg.length - 2] !== '\\'
+                && arg[arg.length - 1] === '"'
+            ) {
+                arg = arg.substring(1, arg.length - 1);
+            }
+            opts[opts.length - 1].push(arg);
         }
     });
     
