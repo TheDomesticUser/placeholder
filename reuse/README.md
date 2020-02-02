@@ -1,0 +1,1 @@
+This is a directory containing reusable functions for the discord bot. Import any files in this directory, and you're good to go
