@@ -1,5 +1,5 @@
 // Universal command options
-const universalOpts = require('.//universal/opts.js');
+const universalOpts = require('./universal/opts.js');
 
 // Import external modules
 const regex = require('xregexp');
