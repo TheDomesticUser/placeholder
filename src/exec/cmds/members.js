@@ -25,9 +25,13 @@ function members(msg, opts)
     for (let opt of opts) {
         switch(opt[0]) // Option = [0], Argument = [1]
         {
-            case 'b': case 'exclude-bots':
+            case 'n': case 'no-bots':
                 // Remove all of the bots from the member array
                 guildMembers = guildMembers.filter(member => member.user.bot !== true);
+                break;
+            case 'b': case 'bots-only':
+                // Remove all of the non-bots from the member array
+                guildMembers = guildMembers.filter(member => member.user.bot === true);
                 break;
             case 'f': case 'filter':
                 // Filters out the members if their usernames don't contain the name input
