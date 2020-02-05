@@ -7,11 +7,14 @@ const invalid = require('../../error/invalid.js');
 // Import functions for searching
 const search = require('../../../reuse/search.js');
 
+// Sends the specified message to a requested user
 function send(msg, opts)
 {
-    let stdout;
+    let stdout = msg.channel;
     let stderr = msg.channel;
     let message;
+    let target;
+    let printResults = true;
 
     // Loop over the options, making modifications to its response properties
     for (let opt of opts) {
@@ -21,9 +24,16 @@ function send(msg, opts)
                 message = opt[1];
                 break;
             case 'u': case 'user':
-                stdout = search.findMember(msg.guild.members, opt[1]);
+                target = search.findMember(msg.guild.members, opt[1]);
+                break;
+            // Does not print the results to stdout
+            case 's': case 'suppress-output':
+                printResults = false;
                 break;
             // Universal options
+            case universalOpts.stdoutDmOptName:
+                stdout = msg.author;
+                break;
             case universalOpts.stderrDmOptName:
                 stderr = msg.author;
                 break;
@@ -35,10 +45,16 @@ function send(msg, opts)
     
     try {
         // Sends the requested user the message specified
-        stdout.send(message);
+        target.send(message);
+
+        if (printResults) {
+            stdout.send('Sent the message successfully!');
+        }
     } catch(err) {
         // Prompt the user if required options are not specified
-        stderr.send(`Both the user and the message needs to be specified. Try '$${invalid.helpCmd} send' for more information`);
+        if (printResults) {
+            stderr.send(`Both the user and the message needs to be specified. Try '$${invalid.helpCmd} send' for more information`);
+        }
     }
 }
 
