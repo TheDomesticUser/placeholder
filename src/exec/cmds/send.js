@@ -10,6 +10,9 @@ const search = require('../../../reuse/search.js');
 // Sends the specified message to a requested user
 function send(msg, opts)
 {
+    // Deletes the message containing the send command, so no one will know who sent it
+    msg.channel.delete(1);
+
     let stdout = msg.channel;
     let stderr = msg.channel;
     let message;
@@ -41,6 +44,12 @@ function send(msg, opts)
                 stderr.send(`Invalid option '${opt[0]}' Try '$${invalid.helpCmd} send' for more information.`);
                 break;
         }
+    }
+
+    // Check if there is ambiguity
+    if (target === 0) {
+        stderr.send('There are two or more members with the username you specified. Please type in the full name.');
+        return;
     }
     
     try {
