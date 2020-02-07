@@ -30,7 +30,10 @@ client.on('message', msg => {
         Check if the client has administrative permissions. 
         Prompt the user if there is not, disabling functionality
     */
-    if (!client.guild.me.hasPermission('ADMINISTRATOR')) {
+    // Find the client user
+    const clientUser = msg.guild.members.find(member => member.id === client.user.id);
+
+    if (!clientUser.hasPermission('ADMINISTRATOR')) {
         msg.channel.send('You need to enable administration privileges to the bot!');
         return;
     }

@@ -25,6 +25,9 @@ function exec(msg, cmdDict) {
         case 'send':
             Module.send(msg, optArr);
             break;
+        case 'randuser':
+            Module.randuser(msg, optArr);
+            break;
         default:
             msg.channel.send(`Invalid command '${cmdName}'. Try $${invalid.helpCmd} for more information`);
             return;

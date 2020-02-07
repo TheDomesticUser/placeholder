@@ -2,5 +2,6 @@
 module.exports = {
     help: require('./cmds/help.js'),
     members: require('./cmds/members.js'),
-    send: require('./cmds/send.js')
+    send: require('./cmds/send.js'),
+    randuser: require('./cmds/randuser.js')
 };
